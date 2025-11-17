@@ -91,15 +91,23 @@ echo ""
 echo "Step 3: Starting new container..."
 docker run -d \
   --name $CONTAINER_NAME \
-  -p $PORT:80 \
+  --network host \
   $IMAGE_NAME
+
+# Get WSL IP address for Windows access
+WSL_IP=$(hostname -I | awk '{print $1}')
 
 echo ""
 echo "=========================================="
 echo "  Container started successfully!"
 echo "=========================================="
 echo ""
-echo "Access the site at: http://localhost:$PORT"
+echo "Access the site at:"
+echo "  From WSL/Linux:   http://localhost:80"
+echo "  From Windows:     http://$WSL_IP:80"
+echo "                    http://localhost:80"
+echo ""
+echo "Note: Using host network mode (port 80 directly)"
 echo ""
 echo "Useful commands:"
 echo "  View logs:        docker logs $CONTAINER_NAME"

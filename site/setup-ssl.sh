@@ -54,15 +54,14 @@ echo "Step 3: Obtaining SSL certificate from Let's Encrypt..."
 echo "This may take a minute..."
 echo ""
 
-# Obtain certificate
+# Obtain certificate (only for main domain, not www)
 docker exec $CONTAINER_NAME certbot certonly \
     --webroot \
     --webroot-path=/var/www/certbot \
     --email $EMAIL \
     --agree-tos \
     --no-eff-email \
-    -d $DOMAIN \
-    -d www.$DOMAIN
+    -d $DOMAIN
 
 # Restore full nginx config with SSL
 echo ""

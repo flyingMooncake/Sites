@@ -24,8 +24,8 @@ RUN apk add --no-cache certbot certbot-nginx
 # Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configuration (HTTP only initially)
+COPY nginx-http.conf /etc/nginx/conf.d/default.conf
 
 # Create directory for certbot challenges
 RUN mkdir -p /var/www/certbot

@@ -5,7 +5,7 @@
 
 set -e
 
-CONTAINER_NAME="presentation-site-container"
+CONTAINER_NAME="sentinelkarma-container"
 DOMAIN="sentinelkarma.space"
 EMAIL="admin@sentinelkarma.space"  # Change this to your email
 

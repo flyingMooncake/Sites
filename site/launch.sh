@@ -6,12 +6,12 @@
 set -e
 
 # Configuration
-IMAGE_NAME="presentation-site"
-CONTAINER_NAME="presentation-site-container"
+IMAGE_NAME="sentinelkarma"
+CONTAINER_NAME="sentinelkarma-container"
 PORT=8080
 
 echo "=========================================="
-echo "  Presentation Site Docker Launcher"
+echo "  SentinelKarma Docker Launcher"
 echo "=========================================="
 echo ""
 

@@ -94,8 +94,15 @@ docker run -d \
   --network host \
   $IMAGE_NAME
 
-# Get WSL IP address for Windows access
-WSL_IP=$(hostname -I | awk '{print $1}')
+# Get local IP address
+LOCAL_IP=$(hostname -I | awk '{print $1}')
+
+# Try to detect if running on AWS
+AWS_PUBLIC_IP=""
+AWS_TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" --connect-timeout 1 2>/dev/null)
+if [ -n "$AWS_TOKEN" ]; then
+    AWS_PUBLIC_IP=$(curl -s -H "X-aws-ec2-metadata-token: $AWS_TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4 --connect-timeout 2 2>/dev/null)
+fi
 
 echo ""
 echo "=========================================="
@@ -103,9 +110,20 @@ echo "  Container started successfully!"
 echo "=========================================="
 echo ""
 echo "Access the site at:"
-echo "  From WSL/Linux:   http://localhost:80"
-echo "  From Windows:     http://$WSL_IP:80"
-echo "                    http://localhost:80"
+echo "  Local:            http://localhost:80"
+
+if [ -n "$AWS_PUBLIC_IP" ]; then
+    echo "  Public (AWS):     http://$AWS_PUBLIC_IP:80"
+    echo ""
+    echo "⚠️  IMPORTANT: Make sure port 80 is open in your Security Group!"
+    echo "   AWS Console → EC2 → Security Groups → Inbound Rules"
+    echo "   Add rule: HTTP (port 80) from 0.0.0.0/0 (or your IP)"
+else
+    echo "  Internal IP:      http://$LOCAL_IP:80"
+    echo ""
+    echo "If on AWS/Cloud: Make sure port 80 is open in firewall/security groups"
+fi
+
 echo ""
 echo "Note: Using host network mode (port 80 directly)"
 echo ""
